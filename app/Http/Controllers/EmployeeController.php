@@ -90,7 +90,7 @@ class EmployeeController extends Controller
             /// Upload the decoded file/image
             if(!file_put_contents($uploadPath , $data)){
                 return response()->json([
-                    'status'=>false,
+                    'status'=>"error",
                     'message'=>'Unable to save file',
                 ]);
             }
@@ -100,6 +100,7 @@ class EmployeeController extends Controller
             $employeeData1 = $request->all();
             $employeeData1['avatar'] = $fileName;
             unset($employeeData1['token']);
+            //dd($employeeData1);
             $employeeData->create($employeeData1);
             return response()->json([
                 'status'=>"ok",
@@ -186,7 +187,7 @@ class EmployeeController extends Controller
                 /// Upload the decoded file/image
                 if(!file_put_contents($uploadPath , $data)){
                     return response()->json([
-                        'status'=>false,
+                        'status'=>"error",
                         'message'=>'Unable to save file',
                     ]);
                 }

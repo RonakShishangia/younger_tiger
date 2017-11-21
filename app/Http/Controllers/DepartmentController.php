@@ -16,7 +16,7 @@ class DepartmentController extends Controller
     {
         $department = Department::all();
         return response()->json([
-            'status'=>true,
+            'status'=>'ok',
             'data'=>$department
         ]);
     }
