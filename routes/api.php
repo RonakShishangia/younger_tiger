@@ -31,4 +31,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 
     // department
     Route::resource('department', 'DepartmentController');
+
+    // attendace
+    Route::resource('attendance', 'AttendanceController');
 });
