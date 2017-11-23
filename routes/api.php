@@ -34,4 +34,5 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 
     // attendace
     Route::resource('attendance', 'AttendanceController');
+    Route::get('inout', 'AttendanceController@inoutflag');
 });

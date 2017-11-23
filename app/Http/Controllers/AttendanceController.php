@@ -71,14 +71,51 @@ class AttendanceController extends Controller
                     $attendanceData->save();
             }else
                 $attendanceData->save();
-            return response()->json([
-                'status'=>'ok',
-                'msg'=>$attendanceData,
-            ]);
+                return response()->json([
+                    'status'=>'ok',
+                    'msg'=>"Success",
+                    'attedance'=>$attendanceData
+                ]);
         }catch(\Excaption $ex){
             return response()->json([
                 'status'=>'error',
                 'msg'=>$ex    
+            ]);
+        }
+    }
+
+    public function inoutflag(Request $request){
+        $user_id = \JWTAuth::toUser($request->token)->id;
+        $attendance = Attendance::where([
+            ['date', date("Y-m-d")], 
+            ['employee_id', $user_id]
+        ])->get();
+        $attendanceCount = $attendance->count();
+        if($attendanceCount > 0){
+            $attendance_id = Attendance::where([
+                ['date', date("Y-m-d")], 
+                ['employee_id', $user_id], 
+                ['end_time',NULL]
+            ])->max('id');
+            $last_session = array_last($attendance->toArray());
+            if($attendance_id > 0){
+                return response()->json([
+                    'status'=>'ok',
+                    'msg'=>'out',
+                    'last_session'=>$last_session
+                ]);
+            }else{
+                return response()->json([
+                    'status'=>'ok',
+                    'msg'=>'in',
+                    'last_session'=>$last_session
+                ]);
+            }
+        }else{
+            return response()->json([
+                'status'=>'ok',
+                'msg'=>'in',
+                'previous_entry'=>$attendance
             ]);
         }
     }
