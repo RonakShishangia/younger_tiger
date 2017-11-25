@@ -112,10 +112,13 @@ class AttendanceController extends Controller
                 ]);
             }
         }else{
+            $lastDayAttendance = Attendance::where([
+                ['employee_id', $user_id]
+            ])->orderBy('id', 'desc')->offset(1)->limit(1)->get();
             return response()->json([
                 'status'=>'ok',
                 'msg'=>'in',
-                'previous_entry'=>$attendance
+                'previous_entry'=>$lastDayAttendance
             ]);
         }
     }
