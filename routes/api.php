@@ -35,4 +35,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     // attendace
     Route::resource('attendance', 'AttendanceController');
     Route::get('inout', 'AttendanceController@inoutflag');
+
+    Route::resource('chcklatlong', 'CheckLatLongController');
+    Route::get('diff', 'CheckLatLongController@get_distance_between_points');
 });
