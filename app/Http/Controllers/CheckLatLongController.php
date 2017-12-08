@@ -102,18 +102,19 @@ class CheckLatLongController extends Controller
 
    
     public function haversineGreatCircleDistance($request){
+        //dd($request->all());
         /**
          * Calculates the great-circle distance between two points, with
          * the Haversine formula.
-         * @param float $latitudeFrom Latitude of start point in [deg decimal]
-         * @param float $longitudeFrom Longitude of start point in [deg decimal]
-         * @param float $latitudeTo Latitude of target point in [deg decimal]
-         * @param float $longitudeTo Longitude of target point in [deg decimal]
-         * @param float $earthRadius Mean earth radius in [m]
-         * @return float Distance between points in [m] (same as earthRadius)
+         * @param $latitudeFrom Latitude of start point in [deg decimal]
+         * @param $longitudeFrom Longitude of start point in [deg decimal]
+         * @param $latitudeTo Latitude of target point in [deg decimal]
+         * @param $longitudeTo Longitude of target point in [deg decimal]
+         * @param $earthRadius Mean earth radius in [m]
+         * @return Distance between points in [m] (same as earthRadius)
          */
-        $latitudeFrom =  $request->latitudeFrom;
-        $longitudeFrom =  $request->longitudeFrom;
+        $latitudeFrom = $request->latitudeFrom;
+        $longitudeFrom = $request->longitudeFrom;
         $latitudeTo = $request->latitudeTo;
         $longitudeTo = $request->longitudeTo;
         $earthRadius = 6371000;
@@ -139,5 +140,6 @@ class CheckLatLongController extends Controller
         $yards = $miles * 1760;
         $feet = $miles * 5280;
         return compact('miles','feet','yards','kilometers','meters');
+        //return $meters;
     }
 }

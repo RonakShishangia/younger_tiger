@@ -40,42 +40,51 @@ class AttendanceController extends Controller
     public function store(Request $request)
     {
         try{
-            $user_id = \JWTAuth::toUser($request->token)->id;
-            
-            $attendanceData = new Attendance;
-            $attendanceData->employee_id = $user_id;
-            $attendanceData->start_time = date("H:i:s");
-            $attendanceData->date = date("Y-m-d");
+            $dist = new CheckLatLongController;
+            $distance = $dist->get_distance_between_points($request);
+            if($distance['meters'] <= $request->range){
+                $user_id = \JWTAuth::toUser($request->token)->id;
+                
+                $attendanceData = new Attendance;
+                $attendanceData->employee_id = $user_id;
+                $attendanceData->start_time = date("H:i:s");
+                $attendanceData->date = date("Y-m-d");
 
-            $attendance = Attendance::where([
-                ['date', date("Y-m-d")], 
-                ['employee_id', $user_id]
-            ])->count();
-            if($attendance > 0){
-                $attendance_id = Attendance::where([
+                $attendance = Attendance::where([
                     ['date', date("Y-m-d")], 
-                    ['employee_id', $user_id], 
-                    ['end_time',NULL]
-                ])->max('id');
-                if($attendance_id != NULL){
-                    $attendanceData = Attendance::find($attendance_id);
-                    // time diffrence 
-                    $to = \Carbon\Carbon::createFromFormat('H:i:s', $attendanceData->start_time);
-                    $from = \Carbon\Carbon::createFromFormat('H:i:s', date("H:i:s"));
-                    $diff_in_minutes = $to->diffInMinutes($from);
-                    
-                    $attendanceData->session_time = $diff_in_minutes;
-                    $attendanceData->end_time = date("H:i:s");
-                    $attendanceData->save();
+                    ['employee_id', $user_id]
+                ])->count();
+                if($attendance > 0){
+                    $attendance_id = Attendance::where([
+                        ['date', date("Y-m-d")], 
+                        ['employee_id', $user_id], 
+                        ['end_time',NULL]
+                    ])->max('id');
+                    if($attendance_id != NULL){
+                        $attendanceData = Attendance::find($attendance_id);
+                        // time diffrence 
+                        $to = \Carbon\Carbon::createFromFormat('H:i:s', $attendanceData->start_time);
+                        $from = \Carbon\Carbon::createFromFormat('H:i:s', date("H:i:s"));
+                        $diff_in_minutes = $to->diffInMinutes($from);
+                        
+                        $attendanceData->session_time = $diff_in_minutes;
+                        $attendanceData->end_time = date("H:i:s");
+                        $attendanceData->save();
+                    }else
+                        $attendanceData->save();
                 }else
                     $attendanceData->save();
-            }else
-                $attendanceData->save();
+                    return response()->json([
+                        'status'=>'ok',
+                        'msg'=>"Success",
+                        'attedance'=>$attendanceData
+                    ]);
+            }else{
                 return response()->json([
-                    'status'=>'ok',
-                    'msg'=>"Success",
-                    'attedance'=>$attendanceData
+                    'status'=>'error',
+                    'msg'=>"You are not in range.",
                 ]);
+            }
         }catch(\Excaption $ex){
             return response()->json([
                 'status'=>'error',

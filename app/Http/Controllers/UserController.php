@@ -2,12 +2,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use JWTAuth;
 use App\User;
 use App\Role;
+use App\CompanyLocation;
 use App\Permission;
 use Auth;
 use JWTAuthException;
@@ -79,7 +79,10 @@ class UserController extends Controller
 ///////
         $status = "ok";
         $msg = "Successfully logged in.";
-        return response()->json(compact('status', 'msg', 'userId', 'token', 'userRole', 'abilities'));
+
+        $comany_location = CompanyLocation::first();
+        
+        return response()->json(compact('status', 'msg', 'userId', 'token', 'userRole', 'abilities', 'comany_location'));
         // return response()->json([
         //     'status' => 'ok',
         //     'msg' => "Successfully logged in.",
