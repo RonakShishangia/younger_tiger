@@ -39,6 +39,11 @@ class AttendanceController extends Controller
      */
     public function store(Request $request)
     {
+        // return response()->json([
+        //             'status'=>'ok',
+        //             'msg'=>$request->all(),
+        //         ]);
+        
         try{
             $dist = new CheckLatLongController;
             $distance = $dist->get_distance_between_points($request);
@@ -76,13 +81,13 @@ class AttendanceController extends Controller
                     $attendanceData->save();
                     return response()->json([
                         'status'=>'ok',
-                        'msg'=>"Success",
+                        'msg'=>$request->all(),
                         'attedance'=>$attendanceData
                     ]);
             }else{
                 return response()->json([
-                    'status'=>'error',
-                    'msg'=>"You are not in range.",
+                    'status'=>'ok',
+                    'msg'=>$distance['meters'],
                 ]);
             }
         }catch(\Excaption $ex){

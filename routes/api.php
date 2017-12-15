@@ -39,4 +39,10 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 
     Route::resource('chcklatlong', 'CheckLatLongController');
     Route::get('diff', 'CheckLatLongController@get_distance_between_points');
+
+    // post
+    Route::resource('post', 'PostController');
+
+    // tag
+    Route::resource('tag', 'TagController');
 });
