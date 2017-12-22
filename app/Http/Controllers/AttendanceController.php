@@ -85,9 +85,10 @@ class AttendanceController extends Controller
                         'attedance'=>$attendanceData
                     ]);
             }else{
+                $diffDist = $request->range - $distance['meters'];
                 return response()->json([
                     'status'=>'ok',
-                    'msg'=>$distance['meters'],
+                    'msg'=>'You are not in range. Far away from Range : '.$diffDist.' M',
                 ]);
             }
         }catch(\Excaption $ex){
