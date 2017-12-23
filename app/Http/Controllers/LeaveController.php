@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Leave;
+use App\Leave_sub;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -11,7 +12,7 @@ class LeaveController extends Controller
 	public function index(){
 		try{
 			$leave=Leave::with([
-			'employee' => function ($query) {
+			'user' => function ($query) {
 				$query->select('id', 'name');
 			},
 		])->get();
@@ -28,15 +29,23 @@ class LeaveController extends Controller
 	}
 
 	public function store(Request $request){
-		return response()->json([$request->all()]);
+		$requestData = json_decode($request->date, true);
 		try{
-			$leave = new Leave();
-			$laave->from_date = $request->from_date;
-			$laave->to_date = $request->to_date;
-			$leave->save();
+			$leaves = new Leave();
+			$leaves->from_date = $request->from_date;
+			$leaves->to_date = $request->to_date;
+			$leaves->user_id = $request->user_id;
+			$leaves->save();
+			foreach($requestData as $key=>$value){
+				$leave_sub = new Leave_sub();
+				$leave_sub->leave_id = $leaves->id;
+				$leave_sub->leave_date =$value['leave_date'];
+				$leave_sub->half_day = $value['leave_type']=="half" ? $value['half_day'] : null;
+				$leave_sub->save();
+			}
 			return response()->json([
 				'status' => 'ok',
-				'data' => 'Record Added Successfully.'
+				'data' => 'Leave created successfully,'
 			], 200);
 		} catch(\Exception $ex){
 			return response()->json([

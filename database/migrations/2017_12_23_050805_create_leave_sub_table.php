@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateLeavesTable extends Migration
+class CreateLeaveSubTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateLeavesTable extends Migration
      */
     public function up()
     {
-        Schema::create('leaves', function (Blueprint $table) {
+        Schema::create('leave_subs', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned()->comment('user table');
-            $table->date('date')->nullable();
+            $table->integer('leave_id')->unsigned();
+            $table->foreign('leave_id')->references('id')
+                ->on('leaves')->onDelete('cascade');
+            $table->date('leave_date')->nullable();
             $table->string('half_day')->nullable();
             $table->softDeletes();
             $table->timestamps();
@@ -30,6 +32,6 @@ class CreateLeavesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('leaves');
+        Schema::dropIfExists('leave_subs');
     }
 }
