@@ -35,6 +35,7 @@ class LeaveController extends Controller
 			$leaves->from_date = $request->from_date;
 			$leaves->to_date = $request->to_date;
 			$leaves->user_id = $request->user_id;
+			$leaves->reason = $request->reason;
 			$leaves->save();
 			foreach($requestData as $key=>$value){
 				$leave_sub = new Leave_sub();
@@ -58,9 +59,10 @@ class LeaveController extends Controller
 	public function edit($id) {
 		try{
 			$leave = Leave::whereId($id)->first();
+			$leaveDays = Leave_sub::where('leave_id', $id)->get();
 			return response()->json([
 				'status' => 'ok',
-				'data' => $leave
+				'data' => compact('leave', 'leaveDays')
 			], 200);
 		} catch(\Exception $ex){
 			return response()->json([
@@ -72,12 +74,26 @@ class LeaveController extends Controller
 	public function update(Request $request, $id){
 		try{
 			$leave = Leave::whereId($id)->first();
-			$leave->update($request->all());
+			$leave->user_id= $request->user_id;
+			$leave->from_date= $request->from_date;
+			$leave->to_date= $request->to_date;
+			$leave->reason= $request->reason;			
+			$leave->save();
+			$requestData = json_decode($request->date, true);
+			leave_sub::where('leave_id', $id)->forceDelete();
+			foreach($requestData as $key=>$value){
+				$leave_sub = new Leave_sub();
+				$leave_sub->leave_id = $id;
+				$leave_sub->leave_date =$value['leave_date'];
+				$leave_sub->half_day = $value['leave_type']=="half" ? $value['half_day'] : null;
+				$leave_sub->save();
+			}
 			return response()->json([
 				'status' => 'ok',
 				'data' => 'Success - Record Updated Successfully.'
 			], 200);
 		}catch(\Exception $ex){
+			dd($ex);
 			return response()->json([
 				'status' => 'error',
 				'data' => 'Something Went Wrong.'
@@ -88,7 +104,8 @@ class LeaveController extends Controller
 	public function destroy($id) {
 		$ids = explode(',', $id);
 		try{
-			$leave = Leave::whareIn('id',$ids)->delete();
+			$del_leave_sub = leave_sub::whereIn('leave_id', $ids)->forceDelete();
+			$leave = Leave::whereIn('id',$ids)->delete();
 			return response()->json([
 				'status' => 'ok',
 				'data' => 'Record Deleted Successfully.'
@@ -100,20 +117,4 @@ class LeaveController extends Controller
 			], 200);
 		}
 	}
-
-	public function get(){
-		try {
-			$leaves = Leave::select('id','employee_id', 'date', 'half_day')->get(); 
-			return response()->json([
-				'status' => 'ok',
-				'data' => $leaves
-			], 200);
-		} catch(\Exception $ex){
-			return response()->json([
-				'status' => 'error',
-				'data' => 'Something Went Wrong.'
-			], 200);
-		}
-	}
-
 }

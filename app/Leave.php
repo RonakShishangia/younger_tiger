@@ -14,9 +14,9 @@ class Leave extends Model {
 	  * The attributes that are mass assignable.
 	  * @var array
 	  */
-	protected $fillable = [
-		'user_id','date','half_day', 'from_date', 'to_date'
-	];
+	// protected $fillable = [
+	// 	'user_id','date','half_day', 'from_date', 'to_date'
+	// ];
 	/**
 	 * The attributes that should be use for soft delete.
 	 * @var array

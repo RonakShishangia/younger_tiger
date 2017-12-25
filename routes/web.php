@@ -22,3 +22,6 @@ Route::get('sendattachmentemail','MailController@attachment_email');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+// dynamic menu
+Route::resource('menu', 'MenuController');
