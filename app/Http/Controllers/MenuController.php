@@ -14,7 +14,8 @@ class MenuController extends Controller
      */
     public function index()
     {
-        return view('menu');
+        $menus = Menu::all();
+        return view('menu', compact('menus'));
     }
 
     /**
@@ -81,5 +82,9 @@ class MenuController extends Controller
     public function destroy(Menu $menu)
     {
         //
+    }
+
+    public function dynamicMenu($id = 0){
+        $menus = Menu::where('parent_id', $id)->get();
     }
 }
