@@ -10,6 +10,9 @@ class Leave extends Model {
 	public function user () {
 		return $this->belongsTo('App\User');
 	}
+	public function leave_days () {
+		return $this->hasMany('App\Leave_sub');
+	}
 	/**
 	  * The attributes that are mass assignable.
 	  * @var array

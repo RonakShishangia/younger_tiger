@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use JWTAuth;
 use App\Leave;
 use App\Leave_sub;
 use App\Http\Controllers\Controller;
@@ -9,18 +10,23 @@ use Illuminate\Http\Request;
 
 class LeaveController extends Controller 
 {
-	public function index(){
+	public function index(Request $request){
 		try{
-			$leave=Leave::with([
-			'user' => function ($query) {
-				$query->select('id', 'name');
-			},
-		])->get();
+			$user_id = JWTAuth::toUser($request->token)->id;
+			$leave=Leave::where('user_id', $user_id)->with([
+				'user' => function ($query) {
+					$query->select('id', 'name');
+				},
+				'leave_days' => function($query){
+					$query->select('*');
+				},
+			])->get();
 		return response()->json([
 				'status' => 'ok',
 				'data' => $leave
 			], 200);
 		} catch(\Exception $ex){
+			dd($ex);
 			return response()->json([
 				'status' => 'error',
 				'data' => 'Something Went Wrong.'

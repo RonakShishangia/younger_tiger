@@ -23,6 +23,10 @@ Route::post('auth/login', 'UserController@login');
 // user route
 //Route::group(['middleware' => 'jwt.auth', 'jwt.refresh'], function () {
 Route::group(['middleware' => 'jwt.auth'], function () {
+
+    // get all data for dropdown
+    Route::get('allroles', 'EmployeeController@getAllRoles');
+
     Route::get('user', 'UserController@getAuthUser');
     
     Route::get('user-view', 'UserController@getAllUser');

@@ -11,5 +11,5 @@ class Employee extends Model
         return $this->belongsTo('App\Department');
     }
 
-    protected $fillable = ['user_id', 'name', 'dob', 'avatar', 'department_id'];
+    protected $fillable = ['user_id', 'name', 'dob', 'avatar', 'department_id', 'email', 'password'];
 }
