@@ -136,6 +136,12 @@ class LeaveController extends Controller
 					$query->select('*')->where('leave_approve_status', null);
 				},
 			])->get();
+			/*
+			foreach($leave as $leaveData){
+				$leaveData['user_name'] = $leaveData['user']['name'];
+				unset($leaveData['user']);
+			}
+			*/
 			
 			if ($requestData==null) {
 				return response()->json([
