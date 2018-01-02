@@ -52,4 +52,6 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 
     // leave
     Route::resource('leave', 'LeaveController');
+    Route::post('getEmpsLeaves', 'LeaveController@leaveApproved')->name('leave.getEmpsLeaves');; // all employees leaves  for ADMIN
+   
 });

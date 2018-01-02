@@ -99,7 +99,6 @@ class LeaveController extends Controller
 				'data' => 'Success - Record Updated Successfully.'
 			], 200);
 		}catch(\Exception $ex){
-			dd($ex);
 			return response()->json([
 				'status' => 'error',
 				'data' => 'Something Went Wrong.'
@@ -114,7 +113,7 @@ class LeaveController extends Controller
 			$leave = Leave::whereIn('id',$ids)->delete();
 			return response()->json([
 				'status' => 'ok',
-				'data' => 'Record Deleted Successfully.'
+				'data' => 'Record Deleted Successfully.'	
 			], 200);
 		}catch(\Exception $ex){
 			return response()->json([
@@ -122,5 +121,45 @@ class LeaveController extends Controller
 				'data' => 'Something Went Wrong.'
 			], 200);
 		}
+	}
+
+	public function leaveApproved(Request $request){
+		$requestData = json_decode($request->id, true);
+		try{
+			//$user_id = JWTAuth::toUser($request->token)->id;
+			//$leave=Leave::where('user_id', $user_id)->with([
+			$leave=Leave::with([
+				'user' => function ($query) {
+					$query->select('id', 'name');
+				},
+				'leave_days' => function($query){
+					$query->select('*')->where('leave_approve_status', null);
+				},
+			])->get();
+			
+			if ($requestData==null) {
+				return response()->json([
+					'status' => 'ok',
+					'data' => $leave
+				], 200);
+			}else{
+				foreach ($requestData as $key => $value) {
+					Leave_sub::where('id', $key)
+					->update(['leave_approve_status' => $value]);
+				}
+				return response()->json([
+					'status' => 'ok',
+					'data' => 'Leave allowed / denied.'
+				], 200);	
+			}
+			
+		}catch(\Exception $ex){
+			dd($ex);
+			return response()->json([
+				'status' => 'error',
+				'data' => 'Something Went Wrong.'
+			], 200);
+		}
+		
 	}
 }
