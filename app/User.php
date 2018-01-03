@@ -11,6 +11,9 @@ class User extends Authenticatable
     use LaratrustUserTrait;
     use Notifiable;
 
+    public function employee () {
+		return $this->hasOne('App\Employee');
+	}
     /**
      * The attributes that are mass assignable.
      *

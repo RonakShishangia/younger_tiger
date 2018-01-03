@@ -10,6 +10,10 @@ class Employee extends Model
     {
         return $this->belongsTo('App\Department');
     }
-
+    // public function user()
+    // {
+    //     return $this->belongsTo('App\User');
+    // }
+    
     protected $fillable = ['user_id', 'name', 'dob', 'avatar', 'department_id', 'email', 'password'];
 }

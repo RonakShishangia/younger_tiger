@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use JWTAuth;
 use App\Leave;
 use App\Leave_sub;
+use App\Employee;
+use App\Department;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -126,8 +128,6 @@ class LeaveController extends Controller
 	public function leaveApproved(Request $request){
 		$requestData = json_decode($request->id, true);
 		try{
-			//$user_id = JWTAuth::toUser($request->token)->id;
-			//$leave=Leave::where('user_id', $user_id)->with([
 			$leave=Leave::with([
 				'user' => function ($query) {
 					$query->select('id', 'name');
@@ -136,13 +136,13 @@ class LeaveController extends Controller
 					$query->select('*')->where('leave_approve_status', null);
 				},
 			])->get();
-			/*
-			foreach($leave as $leaveData){
-				$leaveData['user_name'] = $leaveData['user']['name'];
-				unset($leaveData['user']);
+			foreach ($leave as $leaveData) {
+				$leaveData['employee'] = $leaveData->user->employee;
+				$leaveData['department'] = Department::join('employees', function($join){
+						$join->on('departments.id', '=', 'employees.department_id');
+			 		})->where('employees.department_id', '=', $leaveData->user->employee['department_id'])->first(['departments.id', 'departments.name']);
+				unset($leaveData->user->employee);
 			}
-			*/
-			
 			if ($requestData==null) {
 				return response()->json([
 					'status' => 'ok',
@@ -158,7 +158,6 @@ class LeaveController extends Controller
 					'data' => 'Leave allowed / denied.'
 				], 200);	
 			}
-			
 		}catch(\Exception $ex){
 			dd($ex);
 			return response()->json([

@@ -13,6 +13,13 @@ class Leave extends Model {
 	public function leave_days () {
 		return $this->hasMany('App\Leave_sub');
 	}
+	public function employee () {
+		return $this->hasMany('App\Employee');
+	}
+	public function department()
+    {
+        return $this->belongsTo('App\Department');
+    }
 	/**
 	  * The attributes that are mass assignable.
 	  * @var array
