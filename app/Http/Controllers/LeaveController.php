@@ -138,6 +138,7 @@ class LeaveController extends Controller
 			])->get();
 			foreach ($leave as $leaveData) {
 				$leaveData['employee'] = $leaveData->user->employee;
+				$leaveData['emp_avatar'] = asset('/uploads/employee_image/'.$leaveData['employee']['avatar']);;
 				$leaveData['department'] = Department::join('employees', function($join){
 						$join->on('departments.id', '=', 'employees.department_id');
 			 		})->where('employees.department_id', '=', $leaveData->user->employee['department_id'])->first(['departments.id', 'departments.name']);
