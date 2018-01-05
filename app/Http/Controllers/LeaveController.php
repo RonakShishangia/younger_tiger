@@ -10,6 +10,11 @@ use App\Department;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use LaravelFCM\Message\OptionsBuilder;
+use LaravelFCM\Message\PayloadDataBuilder;
+use LaravelFCM\Message\PayloadNotificationBuilder;
+use FCM;
+
 class LeaveController extends Controller 
 {
 	public function index(Request $request){
@@ -155,6 +160,27 @@ class LeaveController extends Controller
 					Leave_sub::where('id', $key)
 					->update(['leave_approve_status' => $value]);
 				}
+
+
+
+				$optionBuilder = new OptionsBuilder();
+				$optionBuilder->setTimeToLive(60*20);
+
+				$notificationBuilder = new PayloadNotificationBuilder('my title');
+				$notificationBuilder->setBody('Hello world')->setSound('default');
+
+				$dataBuilder = new PayloadDataBuilder();
+				$dataBuilder->addData(['a_data' => 'my_data']);
+
+				$option = $optionBuilder->build();
+				$notification = $notificationBuilder->build();
+				$data = $dataBuilder->build();
+
+				$device_ID = "eRXrVTh-XnQ:APA91bGDEs-x01gq4x-Sa_0EHmEwQ9WjeSPnNJSqcT8kWzVQDifodyOKfOIXaQ6rRpNrakflJmcMmthO3OzaVZXNr6k4RFpX292G2Bshd61Jeg36-guADWFVTBWSIHriDDagmZuWYb0f";
+
+				$downstreamResponse = FCM::sendTo($device_ID, $option, $notification, $data);
+
+
 				return response()->json([
 					'status' => 'ok',
 					'data' => 'Leave allowed / denied.'

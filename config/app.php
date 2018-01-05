@@ -181,6 +181,9 @@ return [
 
         Laratrust\LaratrustServiceProvider::class,
 
+        // FCM notification
+        LaravelFCM\FCMServiceProvider::class,
+
     ],
 
     /*
@@ -233,6 +236,9 @@ return [
         'JWTAuth' => 'Tymon\JWTAuth\Facades\JWTAuth',
 
         'Laratrust'   => Laratrust\LaratrustFacade::class,
+
+        'FCM'      => LaravelFCM\Facades\FCM::class,
+        'FCMGroup' => LaravelFCM\Facades\FCMGroup::class, // Optional
     ],
 
 ];
