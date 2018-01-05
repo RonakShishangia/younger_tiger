@@ -42,6 +42,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     Route::get('inout', 'AttendanceController@inoutflag');
 
     Route::resource('chcklatlong', 'CheckLatLongController');
+    // this route is used to  check distence between tow lat long 
     Route::get('diff', 'CheckLatLongController@get_distance_between_points');
 
     // post
