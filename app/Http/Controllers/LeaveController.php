@@ -167,7 +167,7 @@ class LeaveController extends Controller
 				$optionBuilder->setTimeToLive(60*20);
 
 				$notificationBuilder = new PayloadNotificationBuilder('my title');
-				$notificationBuilder->setBody('Hello world')->setSound('default');
+				$notificationBuilder->setBody("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.")->setIcon("")->setSound('default');
 
 				$dataBuilder = new PayloadDataBuilder();
 				$dataBuilder->addData(['a_data' => 'my_data']);
@@ -176,7 +176,7 @@ class LeaveController extends Controller
 				$notification = $notificationBuilder->build();
 				$data = $dataBuilder->build();
 
-				$device_ID = "eRXrVTh-XnQ:APA91bGDEs-x01gq4x-Sa_0EHmEwQ9WjeSPnNJSqcT8kWzVQDifodyOKfOIXaQ6rRpNrakflJmcMmthO3OzaVZXNr6k4RFpX292G2Bshd61Jeg36-guADWFVTBWSIHriDDagmZuWYb0f";
+				$device_ID = "fsMhgh1CBUQ:APA91bHmdSHFyg2LQntlCz92y0bwR6ifxcRy_ujCW8g4UTvBgy7Yt4FzgAiPhMY5dRwbydpHarJ8ywEqlcLsTehFOGsFR2IDLSQGRxe-ibanvVzLVz7wD4kxewZkMnofym4ewmkMvatj";
 
 				$downstreamResponse = FCM::sendTo($device_ID, $option, $notification, $data);
 
