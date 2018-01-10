@@ -14,6 +14,7 @@ use LaravelFCM\Message\OptionsBuilder;
 use LaravelFCM\Message\PayloadDataBuilder;
 use LaravelFCM\Message\PayloadNotificationBuilder;
 use FCM;
+use Pusher\Pusher;
 
 class LeaveController extends Controller 
 {
@@ -161,26 +162,45 @@ class LeaveController extends Controller
 					->update(['leave_approve_status' => $value]);
 				}
 
+			/*
+			 * FCM notification for WEB
+			 * START
+			 */ 
+				$options = array(
+					'cluster' => 'ap2',
+					'encrypted' => true
+				);
+				$pusher = new Pusher(
+					'2c49ce3a30ceb17d9fcd',
+					'5ba33fd853b6ae3862b1',
+					'450486',
+					$options
+				);
 
+				$data['message'] = 'hello world';
+				$pusher->trigger('my-channel', 'my-event', $data);
 
-				$optionBuilder = new OptionsBuilder();
-				$optionBuilder->setTimeToLive(60*20);
+			/*
+			* FCM notification for Android
+			* START
+			*/ 
+			$optionBuilder = new OptionsBuilder();
+			$optionBuilder->setTimeToLive(60*20);
 
-				$notificationBuilder = new PayloadNotificationBuilder('my title');
-				$notificationBuilder->setBody("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.")->setIcon("")->setSound('default');
+			$notificationBuilder = new PayloadNotificationBuilder('my title');
+			$notificationBuilder->setBody("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.")->setIcon("")->setSound('default');
 
-				$dataBuilder = new PayloadDataBuilder();
-				$dataBuilder->addData(['a_data' => 'my_data']);
+			$dataBuilder = new PayloadDataBuilder();
+			$dataBuilder->addData(['a_data' => 'my_data']);
 
-				$option = $optionBuilder->build();
-				$notification = $notificationBuilder->build();
-				$data = $dataBuilder->build();
+			$option = $optionBuilder->build();
+			$notification = $notificationBuilder->build();
+			$data = $dataBuilder->build();
 
-				$device_ID = "fsMhgh1CBUQ:APA91bHmdSHFyg2LQntlCz92y0bwR6ifxcRy_ujCW8g4UTvBgy7Yt4FzgAiPhMY5dRwbydpHarJ8ywEqlcLsTehFOGsFR2IDLSQGRxe-ibanvVzLVz7wD4kxewZkMnofym4ewmkMvatj";
-
-				$downstreamResponse = FCM::sendTo($device_ID, $option, $notification, $data);
-
-
+			//$device_ID = "fsMhgh1CBUQ:APA91bHmdSHFyg2LQntlCz92y0bwR6ifxcRy_ujCW8g4UTvBgy7Yt4FzgAiPhMY5dRwbydpHarJ8ywEqlcLsTehFOGsFR2IDLSQGRxe-ibanvVzLVz7wD4kxewZkMnofym4ewmkMvatj";
+			$device_ID = "fBR3Ma_rANc:APA91bGiVeirjYAMHbpeMF7Xga-iAo3NFF_yKJ6u1lOveBGu2i-vBT1yrxMTolGbaZu1XGBlIrmKoQp03bwnRN1Qtnisnv2zsaZv67gkZ0Uxcgat2Ab4EDXx4ipEKRxZcg7L1xbbv9az";
+			
+			$downstreamResponse = FCM::sendTo($device_ID, $option, $notification, $data);
 				return response()->json([
 					'status' => 'ok',
 					'data' => 'Leave allowed / denied.'
