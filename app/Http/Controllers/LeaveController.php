@@ -197,9 +197,9 @@ class LeaveController extends Controller
 			$notification = $notificationBuilder->build();
 			$data = $dataBuilder->build();
 
-			//$device_ID = "fsMhgh1CBUQ:APA91bHmdSHFyg2LQntlCz92y0bwR6ifxcRy_ujCW8g4UTvBgy7Yt4FzgAiPhMY5dRwbydpHarJ8ywEqlcLsTehFOGsFR2IDLSQGRxe-ibanvVzLVz7wD4kxewZkMnofym4ewmkMvatj";
-			$device_ID = "fBR3Ma_rANc:APA91bGiVeirjYAMHbpeMF7Xga-iAo3NFF_yKJ6u1lOveBGu2i-vBT1yrxMTolGbaZu1XGBlIrmKoQp03bwnRN1Qtnisnv2zsaZv67gkZ0Uxcgat2Ab4EDXx4ipEKRxZcg7L1xbbv9az";
-			
+			//Get FCM device id by leave request user
+			$FCMDeviceId = \App\User::find($request->userId);
+			$device_ID = $FCMDeviceId->FCM_device_id;
 			$downstreamResponse = FCM::sendTo($device_ID, $option, $notification, $data);
 				return response()->json([
 					'status' => 'ok',

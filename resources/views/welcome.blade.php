@@ -6,10 +6,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>Laravel</title>
-
+        <link href="    css/toastr.min.css" rel="stylesheet" type="text/css">
         <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
-
+         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
         <!-- Styles -->
         <style>
             html, body {
@@ -63,41 +62,25 @@
                 margin-bottom: 30px;
             }
         </style>
-        <script src="https://js.pusher.com/4.1/pusher.min.js"></script>
-        <script>
-      
-          // Enable pusher logging - don't include this in production
-          Pusher.logToConsole = true;
-      
-          var pusher = new Pusher('2c49ce3a30ceb17d9fcd', {
-            cluster: 'ap2',
-            encrypted: true
-          });
-      
-          var channel = pusher.subscribe('my-channel');
-          channel.bind('my-event', function(data) {
-            alert(data.message);
-          });
-        </script>
     </head>
     <body>
         <div class="flex-center position-ref full-height">
             @if (Route::has('login'))
-                <div class="top-right links">
-                    @if (Auth::check())
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ url('/login') }}">Login</a>
-                        <a href="{{ url('/register') }}">Register</a>
-                    @endif
-                </div>
+            <div class="top-right links">
+                @if (Auth::check())
+                <a href="{{ url('/home') }}">Home</a>
+                @else
+                <a href="{{ url('/login') }}">Login</a>
+                <a href="{{ url('/register') }}">Register</a>
+                @endif
+            </div>
             @endif
-
+            
             <div class="content">
                 <div class="title m-b-md">
                     Laravel
                 </div>
-
+                <div class="notification"></div>
                 <div class="links">
                     <a href="https://laravel.com/docs">Documentation</a>
                     <a href="https://laracasts.com">Laracasts</a>
@@ -107,5 +90,26 @@
                 </div>
             </div>
         </div>
+        
+        <script  src="js/app.js"></script>
+        <script  src="js/toastr.min.js"></script>
+        <script  src="js/pusher.min.js"></script>
+       <script>
+           toastr.options = { "debug": false, "newestOnTop": false, "positionClass": "toast-top-right", "closeButton": true, "toastClass": "fadeIn fadeInDown", };
+          // Enable pusher logging - don't include this in production
+          Pusher.logToConsole = true;
+      
+          var pusher = new Pusher('2c49ce3a30ceb17d9fcd', {
+            cluster: 'ap2',
+            encrypted: true
+          });
+          var channel = pusher.subscribe('my-channel');
+          channel.bind('my-event', function(data) {
+            // Display an info toast with no title
+            toastr.info(data.message);
+          });
+        </script>
     </body>
 </html>
+
+
