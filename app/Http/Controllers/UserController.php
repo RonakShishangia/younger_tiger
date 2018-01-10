@@ -81,6 +81,8 @@ class UserController extends Controller
         $msg = "Successfully logged in.";
 
         $comany_location = CompanyLocation::first();
+
+        $updateFCMToken = User::where('id', $userId)->update(['FCM_device_id' => $request->FCMDeviceId]);
         
         return response()->json(compact('status', 'msg', 'userId', 'token', 'userRole', 'abilities', 'comany_location'));
         // return response()->json([
