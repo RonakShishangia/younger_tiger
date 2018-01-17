@@ -186,9 +186,9 @@ class LeaveController extends Controller
 			*/ 
 			$optionBuilder = new OptionsBuilder();
 			$optionBuilder->setTimeToLive(60*20);
-
+			$liveImg = "https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAwjAAAAJDRiN2YwYjE5LTEwMzAtNDc0Mi1iZjIwLTNjMzMyMzM4ZmNkMQ.jpg";
 			$notificationBuilder = new PayloadNotificationBuilder('my title');
-			$notificationBuilder->setBody("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.")->setIcon("")->setSound('default');
+			$notificationBuilder->setIcon($liveImg)->setBody("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.")->setSound('default');
 
 			$dataBuilder = new PayloadDataBuilder();
 			$dataBuilder->addData(['a_data' => 'my_data']);
