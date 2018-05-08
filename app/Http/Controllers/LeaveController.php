@@ -163,7 +163,7 @@ class LeaveController extends Controller
 				}
 
 			/*
-			 * FCM notification for WEB
+			 * pusher notification for WEB
 			 * START
 			 */ 
 				$options = array(
